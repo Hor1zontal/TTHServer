@@ -1,15 +1,14 @@
-package model
+package mysql
 
 import (
 	"fmt"
-	"os"
-	"time"
-	"ttserver/utils"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
+	"os"
+	"time"
+	"ttserver/config"
 )
 
 var db *gorm.DB
@@ -18,11 +17,11 @@ var err error
 func InitDb() {
 
 	dns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		utils.DbUser,
-		utils.DbPassWord,
-		utils.DbHost,
-		utils.DbPort,
-		utils.DbName,
+		config.Server.Database.DBUser,
+		config.Server.Database.DBPassword,
+		config.Server.Database.DBHost,
+		config.Server.Database.DBPort,
+		config.Server.Database.DBName,
 	)
 	db, err = gorm.Open(mysql.Open(dns), &gorm.Config{
 		// gorm日志模式：silent

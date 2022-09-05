@@ -1,7 +1,11 @@
 package main
 
-import "ttserver/model"
+import (
+	"ttserver/config"
+	"ttserver/model/mysql"
+)
 
 func main() {
-	model.InitDb()
+	config.Init()
+	mysql.InitDb()
 }

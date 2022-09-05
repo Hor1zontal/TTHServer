@@ -1,0 +1,7 @@
+database:
+  DB: mysql
+  DBHost: 121.4.219.39
+  DBUser: root
+  DBPassword: admin@123456
+  DBName: tinytolkhub
+  DBPort : 33061
