@@ -1,24 +1,4 @@
-package model
-
-import (
-	"errors"
-	"log"
-)
-
-const (
-	IsLike     = 0 //点赞的状态
-	Unlike     = 1 //取消赞的状态
-	LikeAction = 1 //点赞的行为
-)
-
-// Like 表的结构。
-type Like struct {
-	Id      int64 //自增主键
-	UserId  int64 //点赞用户id
-	VideoId int64 //视频id
-	Cancel  int8  //是否点赞，0为点赞，1为取消赞
-}
-
+package DAO
 // GetLikeUserIdList 根据videoId获取点赞userId
 func GetLikeUserIdList(videoId int64) ([]int64, error) {
 	var likeUserIdList []int64 //存所有该视频点赞用户id；
@@ -100,3 +80,4 @@ func GetLikeVideoIdList(userId int64) ([]int64, error) {
 	}
 	return likeVideoIdList, nil
 }
+

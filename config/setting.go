@@ -19,7 +19,7 @@ type BaseConfig struct {
 }
 
 type DBConfig struct {
-	DB string `yaml:"DB"`
+	DB string `yaml:"db"`
 	DBHost string `yaml:"DBHost"`
 	DBUser string `yaml:"DBUser"`
 	DBPassword string `yaml:"DBPassword"`

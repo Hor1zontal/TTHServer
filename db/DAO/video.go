@@ -1,24 +1,8 @@
-package model
+package DAO
 
-import (
-	"time"
+import "ttserver/db"
 
-	"gorm.io/gorm"
-)
-
-type TableVideo struct {
-	gorm.Model
-	Title       string `gorm:"type:varchar(100);not null" json:"title"`
-	Id          int64  `gorm:"type:int;not null" json:"id"`
-	AuthorId    int64
-	Desc        string `gorm:"type:varchar(200)" json:"desc"`
-	PlayUrl     string `gorm:"type:varchar(200)" json:"play_url"`
-	CoverUrl    string `gorm:"type:varchar(200)" json:"cover_url"`
-	PublishTime time.Time
-}
-
-// GetVideosByAuthorId
-// 根据作者的id来查询对应数据库数据，并返回Video切片
+type TableVideo db.TableVideo
 func GetVideosByAuthorId(authorId int64) ([]TableVideo, error) {
 	//建立结果集接收
 	var data []TableVideo
