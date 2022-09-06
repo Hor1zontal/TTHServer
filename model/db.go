@@ -2,14 +2,13 @@ package model
 
 import (
 	"fmt"
-	"os"
-	"time"
-	"ttserver/config"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
+	"os"
+	"time"
+	"ttserver/config"
 )
 
 var db *gorm.DB
@@ -60,13 +59,16 @@ func GetDB()*gorm.DB{
 	return db
 }
 
-func Find(TypeName interface{}, key map[string]interface{}, fields []interface{} )error{
+func Find(TypeName interface{}, key map[string]interface{}, fields []string )error{
 	db  := GetDB()
+	var user User
 
-	result := db.Where(key).Find(TypeName)
+	result := db.Where(key).Find(&user)
+	fmt.Println(result.RowsAffected)
+	fmt.Println(user)
 	if result.Error != nil{
 		return err
 	}
-	return user
+	return nil
 
 }
