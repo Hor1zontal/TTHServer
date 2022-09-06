@@ -33,7 +33,7 @@ var codeMsg = map[int]string{
 	ERROR_TOKEN_TYPE_WRONG: "TOKEN格式错误,请重新登陆",
 	ERROR_USER_NO_RIGHT:    "该用户无权限",
 
-	ERROR_ART_NOT_EXIST: "文章不存在",
+	ERROR_ART_NOT_EXIST: "不存在",
 
 	ERROR_CATENAME_USED:  "该分类已存在",
 	ERROR_CATE_NOT_EXIST: "该分类不存在",
