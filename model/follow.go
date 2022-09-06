@@ -14,18 +14,24 @@ func FindRelation(userId int64, targetId int64) (*Follow, error) {
 	// follow变量用于后续存储数据库查出来的用户关系。
 	follow := Follow{}
 	//当查询出现错误时，日志打印err msg，并return err.
-	if err := db.
-		Where("user_id = ?", targetId).
-		Where("follower_id = ?", userId).
-		Where("cancel = ?", 0).
-		Take(&follow).Error; nil != err {
-		// 当没查到数据时，gorm也会报错。
-		if "record not found" == err.Error() {
-			return nil, nil
-		}
-		log.Println(err.Error())
-		return nil, err
+	findMap := make(map[string]interface{})
+	var fields []string
+	if err := Find(&follow, findMap, fields); err != nil {
+
 	}
+
+	//if err := db.
+	//	Where("user_id = ?", targetId).
+	//	Where("follower_id = ?", userId).
+	//	Where("cancel = ?", 0).
+	//	Take(&follow).Error; nil != err {
+	//	// 当没查到数据时，gorm也会报错。
+	//	if "record not found" == err.Error() {
+	//		return nil, nil
+	//	}
+	//	log.Println(err.Error())
+	//	return nil, err
+	//}
 	//正常情况，返回取到的值和空err.
 	return &follow, nil
 }
