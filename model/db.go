@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 	"ttserver/config"
+	"github.com/mitchellh/mapstructure"
 )
 
 var db *gorm.DB
@@ -59,16 +60,59 @@ func GetDB()*gorm.DB{
 	return db
 }
 
-func Find(TypeName interface{}, key map[string]interface{}, fields []string )error{
+func Find(TypeName interface{}, condition map[string]interface{}, fields []string )error{
 	db  := GetDB()
-	var user User
-
-	result := db.Where(key).Find(&user)
-	fmt.Println(result.RowsAffected)
-	fmt.Println(user)
+	if _, ok := condition["status"]; !ok{
+		condition["status"] = 1
+	}
+	result := db.Where(condition).Select(fields).Find(TypeName)
+	//fmt.Println(result.RowsAffected)
+	//fmt.Println(TypeName)
 	if result.Error != nil{
 		return err
 	}
 	return nil
-
 }
+
+func Update(TypeName interface{}, condition map[string]interface{}, key map[string]interface{})error{
+	db := GetDB()
+	if _, ok := condition["status"]; !ok{
+		condition["status"] = 1
+	}
+	result := db.Model(TypeName).Where(condition).Updates(key)
+	//fmt.Println(result.RowsAffected)
+	if result.Error != nil{
+		return err
+	}
+	return nil
+}
+
+//假删除，让Status 设置为 1
+func Delete(TypeName interface{}, condition map[string]interface{})error{
+
+	if _, ok := condition["status"]; !ok{
+		condition["status"] = 1
+	}
+	err := Update(TypeName,condition,map[string]interface{}{"status":1})
+	if err != nil{
+		return err
+	}
+	return nil
+}
+
+
+func Add(TypeName interface{}, key map[string]interface{})error{
+
+	err := mapstructure.Decode(key,TypeName)
+	if err != nil{
+		return err
+	}
+	db := GetDB()
+	result := db.Create(TypeName)
+	fmt.Println(result.RowsAffected)
+	if result.Error != nil{
+		return result.Error
+	}
+	return nil
+}
+
