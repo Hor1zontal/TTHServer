@@ -1,17 +1,16 @@
-package model
+package db
 
 import (
 	"fmt"
+	"github.com/mitchellh/mapstructure"
+	log "github.com/sirupsen/logrus"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 	"os"
 	"time"
 	"ttserver/config"
-
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
-	"gorm.io/gorm/schema"
-	"github.com/mitchellh/mapstructure"
-
 )
 
 var db *gorm.DB
@@ -66,12 +65,14 @@ func GetDB() *gorm.DB {
 func Find(TypeName interface{}, condition map[string]interface{}, fields []string )error{
 	db  := GetDB()
 	if _, ok := condition["status"]; !ok{
-		condition["status"] = 1
+		condition["status"] = 0
 	}
 	result := db.Where(condition).Select(fields).Find(TypeName)
+	log.Info(result)
 	//fmt.Println(result.RowsAffected)
 	//fmt.Println(TypeName)
 	if result.Error != nil{
+		log.Error(err)
 		return err
 	}
 	return nil
@@ -80,42 +81,47 @@ func Find(TypeName interface{}, condition map[string]interface{}, fields []strin
 func Update(TypeName interface{}, condition map[string]interface{}, key map[string]interface{})error{
 	db := GetDB()
 	if _, ok := condition["status"]; !ok{
-		condition["status"] = 1
+		condition["status"] = 0
 	}
 	result := db.Model(TypeName).Where(condition).Updates(key)
+
+
 	//fmt.Println(result.RowsAffected)
 	if result.Error != nil{
+		log.Error(err)
 		return err
 	}
 	return nil
 }
-
 //假删除，让Status 设置为 1
 func Delete(TypeName interface{}, condition map[string]interface{})error{
 
 	if _, ok := condition["status"]; !ok{
-		condition["status"] = 1
+		condition["status"] = 0
 	}
 	err := Update(TypeName,condition,map[string]interface{}{"status":1})
 	if err != nil{
+		log.Error(err)
 		return err
 	}
 	return nil
 }
-
 
 func Add(TypeName interface{}, key map[string]interface{})error{
 
 	err := mapstructure.Decode(key,TypeName)
 	if err != nil{
+		log.Error(err)
 		return err
 	}
 	db := GetDB()
 	result := db.Create(TypeName)
+	log.Info(result.RowsAffected)
 	//fmt.Println(result.RowsAffected)
 	if result.Error != nil{
 		return result.Error
 	}
 	return nil
 }
+
 

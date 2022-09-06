@@ -1,15 +1,4 @@
-package model
-
-import "log"
-
-// Follow 用户关系结构，对应用户关系表。
-type Follow struct {
-	Id         int64
-	UserId     int64
-	FollowerId int64
-	Cancel     int8
-}
-
+package DAO
 func FindRelation(userId int64, targetId int64) (*Follow, error) {
 	// follow变量用于后续存储数据库查出来的用户关系。
 	follow := Follow{}
@@ -154,3 +143,4 @@ func GetFollowersIds(userId int64) ([]int64, error) {
 	// 查询成功。
 	return ids, nil
 }
+
