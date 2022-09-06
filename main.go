@@ -8,4 +8,5 @@ import (
 func main() {
 	config.Init()
 	mysql.InitDb()
+	//model.CreateUserTable()
 }

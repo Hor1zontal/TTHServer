@@ -55,3 +55,17 @@ func InitDb() {
 	sqlDB.SetConnMaxLifetime(10 * time.Second)
 
 }
+func GetDB()*gorm.DB{
+	return db
+}
+
+func Find(TypeName interface{}, key map[string]interface{}, fields []interface{} )error{
+	db  := GetDB()
+
+	result := db.Where(key).Find(TypeName)
+	if result.Error != nil{
+		return err
+	}
+	return user
+
+}
