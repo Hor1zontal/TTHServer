@@ -112,7 +112,7 @@ func Add(TypeName interface{}, key map[string]interface{})error{
 	}
 	db := GetDB()
 	result := db.Create(TypeName)
-	fmt.Println(result.RowsAffected)
+	//fmt.Println(result.RowsAffected)
 	if result.Error != nil{
 		return result.Error
 	}
