@@ -1,14 +1,15 @@
-package mysql
+package model
 
 import (
 	"fmt"
+	"os"
+	"time"
+	"ttserver/config"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"os"
-	"time"
-	"ttserver/config"
 )
 
 var db *gorm.DB
