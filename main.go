@@ -2,7 +2,7 @@ package main
 
 import (
 	"ttserver/config"
-	"ttserver/model/mysql"
+	"ttserver/model"
 )
 
 func main() {
