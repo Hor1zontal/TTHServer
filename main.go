@@ -7,7 +7,7 @@ import (
 
 func main() {
 	config.Init()
-	db.InitDb()
+	db.Init()
 	//model.CreateUserTable()
 	var user db.User
 	err := db.Add(&user, map[string]interface{}{"username": "wxl", "password": "123"})

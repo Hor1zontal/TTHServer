@@ -16,7 +16,7 @@ import (
 var db *gorm.DB
 var err error
 
-func InitDb() {
+func Init() {
 
 	dns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		config.Server.Database.DBUser,
@@ -61,56 +61,55 @@ func GetDB() *gorm.DB {
 	return db
 }
 
-
-func Find(TypeName interface{}, condition map[string]interface{}, fields []string )error{
-	db  := GetDB()
-	if _, ok := condition["status"]; !ok{
+func Find(TypeName interface{}, condition map[string]interface{}, fields []string) error {
+	db := GetDB()
+	if _, ok := condition["status"]; !ok {
 		condition["status"] = 0
 	}
 	result := db.Where(condition).Select(fields).Find(TypeName)
 	log.Info(result)
 	//fmt.Println(result.RowsAffected)
 	//fmt.Println(TypeName)
-	if result.Error != nil{
+	if result.Error != nil {
 		log.Error(err)
 		return err
 	}
 	return nil
 }
 
-func Update(TypeName interface{}, condition map[string]interface{}, key map[string]interface{})error{
+func Update(TypeName interface{}, condition map[string]interface{}, key map[string]interface{}) error {
 	db := GetDB()
-	if _, ok := condition["status"]; !ok{
+	if _, ok := condition["status"]; !ok {
 		condition["status"] = 0
 	}
 	result := db.Model(TypeName).Where(condition).Updates(key)
 
-
 	//fmt.Println(result.RowsAffected)
-	if result.Error != nil{
+	if result.Error != nil {
 		log.Error(err)
 		return err
 	}
 	return nil
 }
-//假删除，让Status 设置为 1
-func Delete(TypeName interface{}, condition map[string]interface{})error{
 
-	if _, ok := condition["status"]; !ok{
+//假删除，让Status 设置为 1
+func Delete(TypeName interface{}, condition map[string]interface{}) error {
+
+	if _, ok := condition["status"]; !ok {
 		condition["status"] = 0
 	}
-	err := Update(TypeName,condition,map[string]interface{}{"status":1})
-	if err != nil{
+	err := Update(TypeName, condition, map[string]interface{}{"status": 1})
+	if err != nil {
 		log.Error(err)
 		return err
 	}
 	return nil
 }
 
-func Add(TypeName interface{}, key map[string]interface{})error{
+func Add(TypeName interface{}, key map[string]interface{}) error {
 
-	err := mapstructure.Decode(key,TypeName)
-	if err != nil{
+	err := mapstructure.Decode(key, TypeName)
+	if err != nil {
 		log.Error(err)
 		return err
 	}
@@ -118,10 +117,8 @@ func Add(TypeName interface{}, key map[string]interface{})error{
 	result := db.Create(TypeName)
 	log.Info(result.RowsAffected)
 	//fmt.Println(result.RowsAffected)
-	if result.Error != nil{
+	if result.Error != nil {
 		return result.Error
 	}
 	return nil
 }
-
-
