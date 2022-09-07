@@ -1,62 +1,82 @@
 package DAO
-func FindRelation(userId int64, targetId int64) (*Follow, error) {
-	// follow变量用于后续存储数据库查出来的用户关系。
-	follow := Follow{}
+
+import (
+	"ttserver/constant"
+	"ttserver/db"
+)
+
+func FindRelation(userId int64, targetId int64) int {
+	// 定义需要查找的条件
+	var fields []string
+	follow := db.Follow{}
 	//当查询出现错误时，日志打印err msg，并return err.
 	findMap := make(map[string]interface{})
-	var fields []string
-	if err := Find(&follow, findMap, fields); err != nil {
-
+	findMap["userId"] = userId
+	findMap["targetId"] = targetId
+	if err := db.Find(&follow, findMap, fields); err != nil {
+		return constant.ERROR_Follow_NOT_EXIST
 	}
-
-	//if err := db.
-	//	Where("user_id = ?", targetId).
-	//	Where("follower_id = ?", userId).
-	//	Where("cancel = ?", 0).
-	//	Take(&follow).Error; nil != err {
-	//	// 当没查到数据时，gorm也会报错。
-	//	if "record not found" == err.Error() {
-	//		return nil, nil
-	//	}
-	//	log.Println(err.Error())
-	//	return nil, err
-	//}
-	//正常情况，返回取到的值和空err.
-	return &follow, nil
+	return constant.SUCCSE
 }
+
+//if err := db.
+//	Where("user_id = ?", targetId).
+//	Where("follower_id = ?", userId).
+//	Where("cancel = ?", 0).
+//	Take(&follow).Error; nil != err {
+//	// 当没查到数据时，gorm也会报错。
+//	if "record not found" == err.Error() {
+//		return nil, nil
+//	}
+//	log.Println(err.Error())
+//	return nil, err
+//}
+//正常情况，返回取到的值和空err.
 
 // GetFollowerCnt 给定当前用户id，查询follow表中该用户的粉丝数。
-func GetFollowerCnt(userId int64) (int64, error) {
-	// 用于存储当前用户粉丝数的变量
-	var cnt int64
-	// 当查询出现错误的情况，日志打印err msg，并返回err.
-	if err := db.
-		Model(Follow{}).
-		Where("user_id = ?", userId).
-		Where("cancel = ?", 0).
-		Count(&cnt).Error; nil != err {
-		log.Println(err.Error())
-		return 0, err
-	}
-	// 正常情况，返回取到的粉丝数。
-	return cnt, nil
-}
 
-// GetFollowingCnt 给定当前用户id，查询follow表中该用户关注了多少人。
-func GetFollowingCnt(userId int64) (int64, error) {
-	// 用于存储当前用户关注了多少人。
-	var cnt int64
-	// 查询出错，日志打印err msg，并return err
-	if err := db.Model(Follow{}).
-		Where("follower_id = ?", userId).
-		Where("cancel = ?", 0).
-		Count(&cnt).Error; nil != err {
-		log.Println(err.Error())
-		return 0, err
-	}
-	// 查询成功，返回人数。
-	return cnt, nil
-}
+//func GetFollowerCnt(userId int64, targetId int64) (int64, int) {
+//	// 定义需要查找的条件
+//	var fields []string
+//	follow := db.Follow{}
+//	//当查询出现错误时，日志打印err msg，并return err.
+//	findMap := make(map[string]interface{})
+//	findMap["userId"] = userId
+//	findMap["targetId"] = targetId
+//	if err := db.Find(&follow, findMap, fields); err != nil {
+//		return &follow, constant.ERROR_Follow_NOT_EXIST
+//	}
+//	return nil, constant.SUCCSE
+//func GetFollowerCnt(userId int64) (int64, error) {
+//	// 用于存储当前用户粉丝数的变量
+//	var cnt int64
+//	// 当查询出现错误的情况，日志打印err msg，并返回err.
+//	if err := db.Model(Follow{}).
+//		Where("user_id = ?", userId).
+//		Where("cancel = ?", 0).
+//		Count(&cnt).Error; nil != err {
+//		log.Println(err.Error())
+//		return 0, err
+//	}
+//	// 正常情况，返回取到的粉丝数。
+//	return cnt, nil
+//}
+//
+//// GetFollowingCnt 给定当前用户id，查询follow表中该用户关注了多少人。
+//func GetFollowingCnt(userId int64) (int64, error) {
+//	// 用于存储当前用户关注了多少人。
+//	var cnt int64
+//	// 查询出错，日志打印err msg，并return err
+//	if err := db.Model(Follow{}).
+//		Where("follower_id = ?", userId).
+//		Where("cancel = ?", 0).
+//		Count(&cnt).Error; nil != err {
+//		log.Println(err.Error())
+//		return 0, err
+//	}
+//	// 查询成功，返回人数。
+//	return cnt, nil
+//}
 
 // InsertFollowRelation 给定用户和目标对象id，插入其关注关系。
 func InsertFollowRelation(userId int64, targetId int64) (bool, error) {
@@ -149,4 +169,3 @@ func GetFollowersIds(userId int64) ([]int64, error) {
 	// 查询成功。
 	return ids, nil
 }
-

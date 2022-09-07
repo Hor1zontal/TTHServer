@@ -19,6 +19,8 @@ const (
 	// code= 3000... 视频模块的错误
 	ERROR_CATENAME_USED  = 3001
 	ERROR_CATE_NOT_EXIST = 3002
+	//code = 4000... 用户follow模块错误
+	ERROR_Follow_NOT_EXIST = 4001
 )
 
 var codeMsg = map[int]string{
@@ -33,10 +35,12 @@ var codeMsg = map[int]string{
 	ERROR_TOKEN_TYPE_WRONG: "TOKEN格式错误,请重新登陆",
 	ERROR_USER_NO_RIGHT:    "该用户无权限",
 
-	ERROR_ART_NOT_EXIST: "文章不存在",
+	ERROR_ART_NOT_EXIST: "视频不存在",
 
-	ERROR_CATENAME_USED:  "该分类已存在",
-	ERROR_CATE_NOT_EXIST: "该分类不存在",
+	ERROR_CATENAME_USED:  "该标签已存在",
+	ERROR_CATE_NOT_EXIST: "该标签不存在",
+
+	ERROR_Follow_NOT_EXIST: "未关注",
 }
 
 func GetErrMsg(code int) string {
