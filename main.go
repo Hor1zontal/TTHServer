@@ -3,16 +3,15 @@ package main
 import (
 	"ttserver/config"
 	"ttserver/db"
-	"ttserver/model"
 )
 
 func main() {
 	config.Init()
-	model.InitDb()
+	db.InitDb()
 	//model.CreateUserTable()
 	var user db.User
-	err := model.Add(&user, map[string]interface{}{"username":"wxl", "password":"123"})
-	if err != nil{
+	err := db.Add(&user, map[string]interface{}{"username": "wxl", "password": "123"})
+	if err != nil {
 		panic(err)
 	}
 	return
@@ -28,6 +27,5 @@ func main() {
 	//	return
 	//}
 	//fmt.Println(user)
-
 
 }
